@@ -17,7 +17,6 @@ const PhoneList = () => {
     wsConnected
   } = useSelector(state => state.phoneBook);
   
-  // Ссылка на текущий список телефонов
   const phonesRef = useRef(phones);
   phonesRef.current = phones;
 
@@ -37,13 +36,11 @@ const PhoneList = () => {
         console.log('WebSocket message:', message);
 
         if (message.type === 'ADD_PHONE') {
-          // Преобразуем ID к числу
           const phone = {
             ...message.phone,
             id: Number(message.phone.id)
           };
           
-          // Проверяем, не существует ли уже такой номер
           const exists = phonesRef.current.some(p => 
             p.id === phone.id || 
             (p.country_code === phone.country_code && 
@@ -85,7 +82,6 @@ const PhoneList = () => {
     }
   };
 
-  // Состояния загрузки и ошибки
   if (status === 'loading' && phones.length === 0) {
     return <p className="text-gray-500 mt-4 text-center">Загрузка...</p>;
   }

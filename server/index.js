@@ -12,27 +12,23 @@ const app = express();
 const PORT = 8080;
 const server = app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
 
-// WebSocket Server
 const wss = new WebSocket.Server({ 
   server,
   path: '/ws', 
   clientTracking: true 
 });
 
-// SQLite Database
 const dbPath = path.join(__dirname, '..', 'database', 'phones.db');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) console.error('Ошибка подключения к БД:', err);
   else console.log('Подключено к SQLite базе данных');
 });
 
-// Создаём папку для БД, если её нет
 const dbDir = path.join(__dirname, '..', 'database');
 if (!fs.existsSync(dbDir)) {
   fs.mkdirSync(dbDir);
 }
 
-// Создаём таблицу
 db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS phones (
@@ -44,8 +40,6 @@ db.serialize(() => {
   `);
 });
 
-// Middleware
-// Добавлен express.json() для парсинга JSON
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -58,7 +52,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// API Routes
 app.get('/api/phones', (req, res) => {
   db.all('SELECT * FROM phones ORDER BY created_at DESC', (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -69,12 +62,18 @@ app.get('/api/phones', (req, res) => {
 app.post('/api/phones', (req, res) => {
   const { countryCode, number } = req.body;
   
-  // Проверка наличия данных
+  if (number.length < 3 || number.length > 10) {
+    return res.status(400).json({ error: 'Номер должен содержать от 3 до 10 цифр' });
+  }
+
+  if (!/^\d+$/.test(number)) {
+    return res.status(400).json({ error: 'Номер должен содержать только цифры' });
+  }
+  
   if (!countryCode || !number) {
     return res.status(400).json({ error: 'Не указан код страны или номер' });
   }
   
-  // Валидация на сервере
   if (!/^\d{3,10}$/.test(number)) {
     return res.status(400).json({ error: 'Номер должен содержать от 3 до 10 цифр' });
   }
@@ -97,7 +96,6 @@ app.post('/api/phones', (req, res) => {
         created_at: new Date().toISOString()
       };
       
-      // Рассылаем новое событие всем клиентам
       wss.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify({ 
@@ -122,7 +120,6 @@ app.delete('/api/phones/:id', (req, res) => {
       return res.status(404).json({ error: 'Номер не найден' });
     }
     
-    // Рассылаем событие удаления
     wss.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({ 
@@ -136,11 +133,9 @@ app.delete('/api/phones/:id', (req, res) => {
   });
 });
 
-// WebSocket обработчик
 wss.on('connection', (ws, req) => {
   console.log('Новый WebSocket клиент подключён', req.socket.remoteAddress);
   
-  // Отправляем приветственное сообщение
   ws.send(JSON.stringify({ type: 'CONNECTED', message: 'Добро пожаловать!' }));
   
   ws.on('message', (message) => {

@@ -11,16 +11,13 @@ function PhoneForm() {
   const [number, setNumber] = useState('');
   const [error, setError] = useState('');
   
-  // Генерируем уникальные ID для полей формы
   const countrySelectId = useId();
   const phoneInputId = useId();
 
   const validatePhone = (num) => {
-    // Основная проверка - длина номера
     if (num.length < 3) return 'Номер должен содержать минимум 3 цифры';
     if (num.length > 10) return 'Номер должен содержать максимум 10 цифр';
     
-    // Дополнительная проверка (на случай обхода ограничений)
     if (!/^\d+$/.test(num)) {
       return 'Номер должен содержать только цифры';
     }
@@ -87,11 +84,9 @@ function PhoneForm() {
           type="text"
           value={number}
           onChange={(e) => {
-            // Очищаем ввод от любых нецифровых символов
             const val = e.target.value.replace(/\D/g, '');
             setNumber(val);
             
-            // Валидация только если есть ввод
             if (val) {
               setError(validatePhone(val));
             } else {

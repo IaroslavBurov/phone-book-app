@@ -5,7 +5,6 @@ if (!API_URL) {
   throw new Error('API URL is not configured');
 }
 
-// Общая функция для обработки HTTP-ответов
 async function handleResponse(response) {
   if (!response.ok) {
     const errorData = await response.json();
@@ -16,13 +15,11 @@ async function handleResponse(response) {
 }
 
 export const phoneApi = {
-  // Получить все номера
   async fetchPhones() {
     const response = await fetch(`${API_URL}/phones`);
     return handleResponse(response);
   },
 
-  // Добавить новый номер
   async addPhone(phoneData) {
     const response = await fetch(`${API_URL}/phones`, {
       method: 'POST',
@@ -32,7 +29,6 @@ export const phoneApi = {
     return handleResponse(response);
   },
 
-  // Удалить номер
   async deletePhone(id) {
     const response = await fetch(`${API_URL}/phones/${id}`, {
       method: 'DELETE'

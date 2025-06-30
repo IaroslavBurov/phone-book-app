@@ -34,8 +34,8 @@ phone-book-app/
 ├── server/                # Сервер (Node.js + Express + WebSocket)
 │   ├── index.js
 │   └── .env               # Переменные окружения сервера
-├── README.md              # Описание проекта
-└── ...
+└── README.md              # Описание проекта
+
 
 ## Как запустить локально
 

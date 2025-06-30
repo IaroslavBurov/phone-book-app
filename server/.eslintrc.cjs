@@ -14,10 +14,10 @@ module.exports = {
     {
       files: ['tailwind.config.js'],
       env: {
-        node: true // Разрешаем использование CommonJS
+        node: true       
       },
       rules: {
-        'no-undef': 'off' // Отключаем проверку для неопределенных переменных
+        'no-undef': 'off' 
       }
     }
   ],
