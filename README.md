@@ -14,6 +14,29 @@
 - **База данных**: SQLite
 - **Инфраструктура**: Vite
 
+phone-book-app/
+├── client/                # Клиентская часть (React + Redux + Tailwind)
+│   ├── public/
+│   ├── src/
+│   │   ├── api/           # API-запросы (fetch)
+│   │   │   └── phoneApi.jsx
+│   │   ├── components/
+│   │   │   ├── PhoneForm.jsx
+│   │   │   └── PhoneList.jsx
+│   │   ├── store/         # Redux-слайс и хранилище
+│   │   │   ├── phoneSlice.js
+│   │   │   └── store.js
+│   │   ├── config.js
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── .env.local         # Переменные окружения клиента
+│   └── ...
+├── server/                # Сервер (Node.js + Express + WebSocket)
+│   ├── index.js
+│   └── .env               # Переменные окружения сервера
+├── README.md              # Описание проекта
+└── ...
+
 ## Как запустить локально
 
 ### Предварительные требования
@@ -71,7 +94,7 @@ http://localhost:5173
 Для клиента (файл `client/.env.local`):
 ```env
 VITE_API_URL=http://localhost:8080/api
-VITE_WS_URL=ws://localhost:8080
+ws://localhost:8081
 ```
 
 Для сервера (файл `server/.env`):

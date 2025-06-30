@@ -17,13 +17,13 @@ async function handleResponse(response) {
 
 export const phoneApi = {
   // Получить все номера
-  fetchPhones: async () => {
+  async fetchPhones() {
     const response = await fetch(`${API_URL}/phones`);
     return handleResponse(response);
-    },
+  },
 
   // Добавить новый номер
-  addPhone: async (phoneData) => {
+  async addPhone(phoneData) {
     const response = await fetch(`${API_URL}/phones`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -33,7 +33,7 @@ export const phoneApi = {
   },
 
   // Удалить номер
-  deletePhone: async (id) => {
+  async deletePhone(id) {
     const response = await fetch(`${API_URL}/phones/${id}`, {
       method: 'DELETE'
     });
