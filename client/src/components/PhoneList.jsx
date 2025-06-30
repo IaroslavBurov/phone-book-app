@@ -116,16 +116,12 @@ const PhoneList = () => {
             className="border border-gray-200 bg-white rounded-md p-4 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow"
           >
             <div>
-              <span className="text-gray-500 text-sm">{phone.country_code}</span>
-              <span className="font-medium ml-1">{phone.number}</span>
-              <div className="text-gray-700 mt-1">
-                {phone.country_code}{phone.number}
-              </div>
+              <span className="font-semibold text-base">{phone.country_code}{phone.number}</span>
             </div>
             
             <button
               onClick={() => handleDelete(phone.id)}
-              className="text-red-600 hover:text-red-800 transition-colors"
+              className="bg-gray-100 hover:bg-red-300 text-gray-700 px-3 py-1 rounded transition-colors border border-gray-300"
               disabled={status === 'loading'}
             >
               Удалить
